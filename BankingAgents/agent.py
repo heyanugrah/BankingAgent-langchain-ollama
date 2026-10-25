@@ -54,41 +54,33 @@ def check_loan_eligibility(monthly_income: float,credit_score: int) -> str:
 # Tool 4: Banking support
 @tool
 def get_banking_support(topic: str) -> str:
+    """Get general banking support information.
 
-    """Provide general banking support information.
-    Use this tool for questions about savings accounts, loans,
-    credit cards, and online banking.
+    Call this tool when the user asks about:
+    - Online banking or internet banking
+    - Savings accounts
+    - Credit cards
+    - Banking customer support
+
+    Args:
+        topic: The banking topic the user needs help with.
     """
+    topic = topic.lower()
 
-    topic = topic.lower().strip()
-    support_information = {
-        "account": (
-            "For savings account support, check your bank's official "
-            "website or contact its customer support team."
-        ),
-        "loan": (
-            "For loan support, check the applicable interest rate, "
-            "repayment schedule, processing fees, and eligibility rules."
-        ),
-        "credit card": (
-            "For credit card support, check your outstanding balance, "
-            "payment due date, minimum payment, and applicable charges."
-        ),
-        "online banking": (
-            "For online banking support, use your bank's official "
-            "website or application. Never share your password, OTP, "
-            "or PIN with anyone."
-        ),
-    }
+    if "online" in topic or "internet" in topic:
+        return (
+            "For online banking support, visit your bank's "
+            "official website or application."
+        )
 
-    for key, information in support_information.items():
-        if key in topic:
-            return information
+    elif "credit card" in topic:
+        return "Check your credit card balance and payment due date."
 
-    return (
-        "I can provide general information about savings accounts, "
-        "loans, credit cards, and online banking."
-    )
+    elif "account" in topic or "savings" in topic:
+        return "Contact your bank for savings account support."
+
+    return "Contact your bank's customer support team."
+
 
 
 def create_banking_agent():
@@ -109,18 +101,33 @@ def create_banking_agent():
     ]
 
     # Create the agent
+    # agent = create_agent(
+    #     model=model,
+    #     tools=tools,
+    #     system_prompt=(
+    #         "You are a helpful banking assistant. "
+    #         "Use the available tools whenever they are relevant. "
+    #         "For mathematical questions, use the appropriate "
+    #         "calculation tool. "
+    #         "For loan eligibility questions, use the loan tool. "
+    #         "For general banking questions, use the banking support tool. "
+    #         "Explain results in simple English. "
+    #         "Never claim that demo loan results guarantee real approval."
+    #     ),
+    # )
+
     agent = create_agent(
         model=model,
         tools=tools,
         system_prompt=(
-            "You are a helpful banking assistant. "
-            "Use the available tools whenever they are relevant. "
-            "For mathematical questions, use the appropriate "
-            "calculation tool. "
-            "For loan eligibility questions, use the loan tool. "
-            "For general banking questions, use the banking support tool. "
-            "Explain results in simple English. "
-            "Never claim that demo loan results guarantee real approval."
+            "You are a banking assistant.\n"
+            "Rules:\n"
+            "1. For square calculations, use calculate_square.\n"
+            "2. For addition, use calculate_sum.\n"
+            "3. For loan eligibility, use check_loan_eligibility.\n"
+            "4. For banking support, use get_banking_support.\n"
+            "5. When a registered tool is relevant, call it rather "
+            "than answering from memory."
         ),
     )
 
