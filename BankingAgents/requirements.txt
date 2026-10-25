@@ -1,0 +1,17 @@
+fastapi
+uvicorn[standard]
+langchain
+langchain-core
+langchain-classic
+langchain-text-splitters
+langchain-google-genai
+langchain-huggingface
+langchain-chroma
+langgraph
+chromadb
+sentence-transformers
+pydantic
+pydantic-settings
+python-dotenv
+langchain
+langchain-ollama
